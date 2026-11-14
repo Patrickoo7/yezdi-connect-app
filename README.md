@@ -75,6 +75,13 @@ Open the **Setup** tab and allow:
 - **Notifications**: the "recording your ride" notification (Android 13+).
 - **Notification access**: lets the app read Google Maps' turn instructions and call/message
   alerts so it can forward them to the dash. They're read on the phone and never stored or uploaded.
+- **Run in background**: turns off battery optimization so rides and the dash link keep working
+  with the screen off.
+
+**Samsung phones (main target: Galaxy M31, One UI 4 / Android 12).** One UI puts apps to sleep
+on top of Android's battery optimization. The Setup tab shows the extra steps: in the app's
+settings set **Battery → Unrestricted**, then add Yezdi Connect to **Settings → Battery and device
+care → Battery → Background usage limits → Never sleeping apps**.
 
 ## Project layout
 

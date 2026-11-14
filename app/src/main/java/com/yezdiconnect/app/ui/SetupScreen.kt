@@ -1,7 +1,9 @@
 package com.yezdiconnect.app.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -42,6 +44,7 @@ fun SetupScreen() {
     val hasLocation = remember(refresh) { Permissions.hasLocation(context) }
     val hasPostNotifications = remember(refresh) { Permissions.hasPostNotifications(context) }
     val hasNotificationAccess = remember(refresh) { Permissions.hasNotificationAccess(context) }
+    val ignoresBatteryLimits = remember(refresh) { Permissions.ignoresBatteryOptimizations(context) }
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -65,6 +68,34 @@ fun SetupScreen() {
             why = stringResource(R.string.perm_notification_access_why),
             granted = hasNotificationAccess,
         ) { context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)) }
+
+        PermissionItem(
+            title = stringResource(R.string.perm_battery),
+            why = stringResource(R.string.perm_battery_why),
+            granted = ignoresBatteryLimits,
+        ) {
+            @SuppressLint("BatteryLife") // a ride/navigation companion must keep running with the screen off
+            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:${context.packageName}"))
+            context.startActivity(intent)
+        }
+
+        // One UI also has its own sleep lists on top of Android's battery optimization.
+        if (Build.MANUFACTURER.equals("samsung", ignoreCase = true)) {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(stringResource(R.string.samsung_battery_title), style = MaterialTheme.typography.titleMedium)
+                    Text(stringResource(R.string.samsung_battery_steps), style = MaterialTheme.typography.bodySmall)
+                    Button(
+                        onClick = {
+                            context.startActivity(
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}")),
+                            )
+                        },
+                        modifier = Modifier.padding(top = 8.dp),
+                    ) { Text(stringResource(R.string.open_app_settings)) }
+                }
+            }
+        }
     }
 }
 

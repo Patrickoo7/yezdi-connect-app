@@ -72,6 +72,7 @@ class PhoneNotificationListener : NotificationListenerService() {
             "com.google.android.dialer",
             "com.android.dialer",
             "com.samsung.android.dialer",
+            "com.samsung.android.incallui", // Samsung's incoming-call screen (One UI)
             "com.android.incallui",
             "com.android.server.telecom",
         )

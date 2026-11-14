@@ -5,7 +5,7 @@ These two recordings tell us how your bike talks over Bluetooth. Do them when yo
 are free, then share the files in the chat. Task 1 takes about 15 minutes, Task 2
 about 30 minutes (including a short ride).
 
-You need: your Yezdi Adventure, your Android phone, and the official Jawa/Yezdi app.
+You need: your Yezdi Adventure, your Galaxy M31, and the official Jawa/Yezdi app.
 
 
 ------------------------------------------------------------
@@ -57,12 +57,12 @@ TASK 2 - Record a Bluetooth log while the official app navigates
           (what the official app sends to the dash)
 ------------------------------------------------------------
 
-Part A - Turn on Bluetooth logging
-1. Settings -> About phone -> tap "Build number" 7 times.
-   (Developer options are now on. On some phones it's under
-   About phone -> Software information.)
-2. Settings -> System -> Developer options ->
-   "Enable Bluetooth HCI snoop log" -> set it to Enabled (or "Full" if offered).
+Part A - Turn on Bluetooth logging  (Galaxy M31 / One UI steps)
+1. Settings -> About phone -> Software information -> tap "Build number"
+   7 times. Enter your PIN if asked. "Developer options" now appears at the
+   very bottom of Settings.
+2. Settings -> Developer options -> turn on
+   "Enable Bluetooth HCI snoop log".
 3. Turn Bluetooth OFF and then ON again (this starts the log).
 
 Part B - Use the official app, and WRITE DOWN THE TIME of each step
@@ -78,14 +78,24 @@ Part B - Use the official app, and WRITE DOWN THE TIME of each step
    NOTE: the log will contain the test caller's number/name and the SMS text,
    so use a test message you don't mind sharing.
 
-Part C - Get the log file
-9. Go back to Developer options and turn "Enable Bluetooth HCI snoop log" OFF.
-10. Developer options -> "Take bug report" -> choose "Full report".
-    Wait for the notification (a few minutes), then tap it to share/save the zip.
-11. Open the zip and find this file:
-        FS/data/misc/bluetooth/logs/btsnoop_hci.log
-    (On Samsung and some other phones the folder can differ. Search the zip for
-    "btsnoop" if you can't find it.)
+Part C - Get the log file  (Galaxy M31 / Samsung method)
+9. Do NOT turn the snoop log off yet. Samsung copies it out with its
+   service menu:
+10. Open the Phone app and dial:  *#9900#
+    (the "SysDump" screen opens; nothing is called).
+11. Tap "Run dumpstate/logcat" and wait until it finishes (a minute or two).
+12. Tap "Copy to sdcard (include CP Ramdump)".
+    Then tap "Exit" (or press back). Do NOT tap anything else in that menu.
+13. Open the "My Files" app -> Internal storage -> "log" folder.
+    Look for a file with "btsnoop" in its name (it may be inside a "bt"
+    sub-folder or have a date in its name), e.g. btsnoop_hci.log.
+14. Now go back to Developer options and turn
+    "Enable Bluetooth HCI snoop log" OFF.
+
+If there is no btsnoop file in the log folder, use the general method:
+    Developer options -> "Take bug report" -> Full report -> wait for the
+    notification -> save the zip -> inside it search for "btsnoop"
+    (often FS/data/log/bt/ or FS/data/misc/bluetooth/logs/ on Samsung).
 
 SEND ME:
   - ONLY the btsnoop_hci.log file (NOT the whole bug report zip, because it
