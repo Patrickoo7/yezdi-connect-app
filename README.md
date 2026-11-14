@@ -8,9 +8,12 @@ A light, clean Android companion app for Yezdi motorcycles, built on **Google Ma
   bike's dash.
 - **Rides**: start/stop ride recording. Route, distance, duration, average and top speed are saved
   on your phone.
-- **Bike**: Bluetooth connection, live stats and dash output. *In progress:* the bike's Bluetooth
-  protocol is still being mapped (see [docs/YOUR-TASKS.txt](docs/YOUR-TASKS.txt)). Until then this
-  tab shows what the app *would* send to the dash.
+- **Bike**: with a Bluetooth OBD-2 adapter in the bike's diagnostic port: live engine data
+  (speed, RPM, engine temp, throttle, load, battery voltage…), **fault codes** with plain-English
+  descriptions, and a live **fuel-economy estimate**. Exact economy comes from a fill-up log
+  (full tank to full tank). Read-only: the app never clears codes or changes anything on the bike.
+- **Bike Bluetooth and dash** (in progress): the bike's own Bluetooth link (gear, odometer, range,
+  turn arrows on the dash) is still being mapped; see [docs/YOUR-TASKS.txt](docs/YOUR-TASKS.txt).
 
 Everything stays on your phone. There are no accounts and no servers, and the app never talks to
 the official app's backends.
@@ -20,7 +23,9 @@ the official app's backends.
 <p>
   <img src="docs/screenshots/1-map.png" width="200" alt="Map tab">
   <img src="docs/screenshots/2-rides.png" width="200" alt="Rides tab">
-  <img src="docs/screenshots/3-bike.png" width="200" alt="Bike tab">
+  <img src="docs/screenshots/3-bike.png" width="200" alt="Bike tab, OBD live data">
+  <img src="docs/screenshots/3b-bike-health.png" width="200" alt="Bike tab, fault codes">
+  <img src="docs/screenshots/3c-bike-fuel.png" width="200" alt="Bike tab, fuel economy">
   <img src="docs/screenshots/4-setup.png" width="200" alt="Setup tab">
 </p>
 
@@ -48,6 +53,9 @@ To update later, open the same link again. Requires Android 8 or newer.
 | Read Google Maps turn instructions | ✅ (English) |
 | Read incoming call / message alerts | ✅ |
 | Ride recording + history | ✅ |
+| OBD-2 adapter (Bluetooth LE or classic) | ✅ tested with a simulated adapter; real-bike test pending |
+| Live engine data, fault codes, battery voltage | ✅ (whatever the bike's ECU supports) |
+| Fuel economy: live estimate + fill-up log | ✅ |
 | Bluetooth connection to the bike | ⏳ waiting for bike data |
 | Live bike stats | ⏳ waiting for bike data |
 | Turn arrows / call / SMS on the dash | ⏳ waiting for bike data |

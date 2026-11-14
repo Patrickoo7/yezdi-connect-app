@@ -32,6 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.yezdiconnect.app.R
 import com.yezdiconnect.app.YezdiApp
+import com.yezdiconnect.app.obd.ObdState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 private enum class Tab(val route: String, @StringRes val label: Int, @DrawableRes val icon: Int) {
     Map("map", R.string.tab_map, R.drawable.ic_map),
@@ -51,8 +53,13 @@ fun YezdiAppUi(app: YezdiApp) {
             topBar = {
                 Column(Modifier.fillMaxWidth().statusBarsPadding()) {
                     Wordmark(Modifier.padding(horizontal = 16.dp, vertical = 14.dp))
-                    // The Bluetooth link to the bike isn't built yet (waiting for the bike data tasks).
-                    StatusBanner(stringResource(R.string.banner_bike_not_connected), BannerKind.Warn)
+                    // The bike's own Bluetooth link isn't built yet; the OBD adapter is the only live link so far.
+                    val obd by app.obd.state.collectAsStateWithLifecycle()
+                    when (val s = obd) {
+                        is ObdState.Connected -> StatusBanner(stringResource(R.string.banner_obd_connected, s.adapterName), BannerKind.Ok)
+                        is ObdState.Connecting -> StatusBanner(stringResource(R.string.banner_obd_connecting), BannerKind.Warn)
+                        else -> StatusBanner(stringResource(R.string.banner_bike_not_connected), BannerKind.Warn)
+                    }
                 }
             },
             bottomBar = {

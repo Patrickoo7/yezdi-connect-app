@@ -4,12 +4,21 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.captureRoboImage
 import com.yezdiconnect.app.YezdiApp
 import com.yezdiconnect.app.nav.ManeuverParser
 import com.yezdiconnect.app.nav.NavigationState
+import com.yezdiconnect.app.obd.Dtc
+import com.yezdiconnect.app.obd.FaultCodes
+import com.yezdiconnect.app.obd.FuelRate
+import com.yezdiconnect.app.obd.ObdInfo
+import com.yezdiconnect.app.obd.ObdLive
+import com.yezdiconnect.app.obd.ObdPid
+import com.yezdiconnect.app.obd.ObdState
+import com.yezdiconnect.app.rides.FillUp
 import com.yezdiconnect.app.rides.Ride
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -53,10 +62,36 @@ class ScreensScreenshotTest {
     }
 
     @Test fun bike() {
+        // Sample OBD connection, as it would look with an adapter on a CAN bike.
+        app.obd.showSample(
+            ObdState.Connected("OBDLink CX", ObdInfo("ELM327 v1.4b", "CAN 11-bit 500 kbit/s", setOf(0x04, 0x05, 0x0B, 0x0C, 0x0D, 0x0F, 0x11)), "MD2ABCDEFG1234567"),
+            ObdLive(
+                values = mapOf(
+                    ObdPid.SPEED to 62.0, ObdPid.RPM to 4180.0, ObdPid.COOLANT_TEMP to 86.0, ObdPid.THROTTLE to 22.0,
+                    ObdPid.ENGINE_LOAD to 38.0, ObdPid.INTAKE_AIR_TEMP to 31.0,
+                ),
+                batteryVolts = 13.8,
+                fuelRate = FuelRate(litresPerHour = 1.9, kmPerLitre = 32.6),
+                tripKm = 18.4, tripLitres = 0.55,
+            ),
+            FaultCodes.Read(listOf(Dtc("P0133"), Dtc("P0301", pending = true)), 1_794_000_000_000L),
+        )
+        runBlocking {
+            val dao = app.database.rides()
+            dao.insertFillUp(FillUp(time = 1_793_000_000_000L, odometerKm = 4210.0, litres = 9.1, fullTank = true))
+            dao.insertFillUp(FillUp(time = 1_793_500_000_000L, odometerKm = 4512.0, litres = 8.6, fullTank = true))
+            dao.insertFillUp(FillUp(time = 1_794_000_000_000L, odometerKm = 4830.0, litres = 9.3, fullTank = true))
+        }
         compose.setContent { YezdiAppUi(app) }
         compose.onNodeWithText("Bike").performClick()
         compose.waitForIdle()
         shot("3-bike")
+        compose.onNodeWithText("Read fault codes").performScrollTo()
+        compose.waitForIdle()
+        shot("3b-bike-health")
+        compose.onNodeWithText("Add fill-up").performScrollTo()
+        compose.waitForIdle()
+        shot("3c-bike-fuel")
     }
 
     @Test fun setup() {

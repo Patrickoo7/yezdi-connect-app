@@ -13,6 +13,18 @@ import com.yezdiconnect.app.nav.PhoneNotificationListener
 object Permissions {
     val location = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
+    /** Bluetooth permissions needed to find and connect to an OBD adapter. */
+    val bluetooth: Array<String> =
+        if (Build.VERSION.SDK_INT >= 31) {
+            arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
+        } else {
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION) // BLE scanning needs location before Android 12
+        }
+
+    fun hasBluetooth(c: Context) = bluetooth.all {
+        ContextCompat.checkSelfPermission(c, it) == PackageManager.PERMISSION_GRANTED
+    }
+
     fun hasLocation(c: Context) =
         ContextCompat.checkSelfPermission(c, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
 

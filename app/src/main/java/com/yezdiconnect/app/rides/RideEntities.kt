@@ -32,3 +32,13 @@ data class RidePoint(
     val speedKmh: Double,
     val accuracyMeters: Float,
 )
+
+/** A fuel stop entered by the rider; used for exact fuel economy (full tank to full tank). */
+@Entity(tableName = "fill_ups")
+data class FillUp(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val time: Long,
+    val odometerKm: Double,
+    val litres: Double,
+    val fullTank: Boolean,
+)
