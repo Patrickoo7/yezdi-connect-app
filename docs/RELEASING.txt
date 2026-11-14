@@ -1,0 +1,56 @@
+PUBLISHING A NEW VERSION ON GITHUB
+==================================
+
+The download link in the README always points to the newest release:
+  https://github.com/Patrickoo7/yezdi-connect-app/releases/latest/download/yezdi-connect.apk
+
+For that link to work, every release must:
+  - have a file attached named exactly  yezdi-connect.apk
+  - NOT be marked "pre-release" (pre-releases are skipped by the link)
+
+
+------------------------------------------------------------
+ONE TIME ONLY - remove the old 0.0.1 release
+------------------------------------------------------------
+It hosts the official Yezdi app's APK, which shouldn't be public.
+
+1. Open https://github.com/Patrickoo7/yezdi-connect-app/releases
+2. Open release "base app" (tag 0.0.1).
+3. Tap the trash-can / "Delete" button and confirm.
+4. Open https://github.com/Patrickoo7/yezdi-connect-app/tags
+5. Next to tag 0.0.1, open the "..." menu -> "Delete tag" and confirm.
+
+
+------------------------------------------------------------
+EACH NEW VERSION
+------------------------------------------------------------
+1. Get the signed APK (I send it in the chat, named yezdi-connect.apk).
+2. Open https://github.com/Patrickoo7/yezdi-connect-app/releases/new
+3. "Choose a tag" -> type the version, e.g.  v0.2.0  -> "Create new tag".
+4. Target: the branch the code is on (currently claude/zen-wozniak-2kltmf,
+   or main once it's merged).
+5. Title: e.g.  Yezdi Connect 0.2.0
+6. Drag yezdi-connect.apk into "Attach binaries".
+7. Leave "Set as a pre-release" UNTICKED.
+8. "Publish release".
+
+Check: open the download link on your phone. It should download the new APK.
+
+
+------------------------------------------------------------
+SIGNING KEY
+------------------------------------------------------------
+Every release must be signed with the same key (yezdi-connect-release.jks),
+or phones will refuse to install it as an update. Keep the key file and its
+password (signing-info.txt) somewhere safe, e.g. Google Drive. Never commit
+them to this repository.
+
+To build a signed release yourself, put these lines in local.properties
+(next to settings.gradle.kts):
+  RELEASE_STORE_FILE=/full/path/to/yezdi-connect-release.jks
+  RELEASE_STORE_PASSWORD=<password from signing-info.txt>
+  RELEASE_KEY_ALIAS=yezdi-connect
+  RELEASE_KEY_PASSWORD=<same password>
+then run:  ./gradlew :app:assembleRelease
+The APK is app/build/outputs/apk/release/app-release.apk (rename it to
+yezdi-connect.apk before uploading).

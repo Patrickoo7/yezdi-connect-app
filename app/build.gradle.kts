@@ -24,14 +24,29 @@ android {
         applicationId = "com.yezdiconnect.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
         manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
         buildConfigField("boolean", "MAPS_API_KEY_SET", mapsApiKey.isNotBlank().toString())
     }
 
+    // Release signing key, also from local.properties (never committed):
+    //   RELEASE_STORE_FILE=/path/to/yezdi-connect-release.jks
+    //   RELEASE_STORE_PASSWORD=...  RELEASE_KEY_ALIAS=yezdi-connect  RELEASE_KEY_PASSWORD=...
+    // Without these, release builds are left unsigned (e.g. in CI).
+    val releaseStoreFile = localProps.getProperty("RELEASE_STORE_FILE")
+    val releaseSigning = releaseStoreFile?.let {
+        signingConfigs.create("release") {
+            storeFile = file(it)
+            storePassword = localProps.getProperty("RELEASE_STORE_PASSWORD")
+            keyAlias = localProps.getProperty("RELEASE_KEY_ALIAS")
+            keyPassword = localProps.getProperty("RELEASE_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = releaseSigning
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

@@ -28,6 +28,17 @@ Screenshots are rendered by `ScreensScreenshotTest` at Galaxy M31 size with samp
 (`./gradlew :app:testDebugUnitTest -Pscreenshots`, output in `app/build/screenshots/`).
 The design is described in [docs/design-notes.md](docs/design-notes.md).
 
+## Install
+
+On your Android phone, open this link (or scan the QR code) and install the APK:
+
+**[Download Yezdi Connect](https://github.com/Patrickoo7/yezdi-connect-app/releases/latest/download/yezdi-connect.apk)**
+
+<img src="docs/install-qr.png" width="160" alt="QR code for the download link">
+
+The first time, Android asks you to allow installing apps from your browser; allow it once.
+To update later, open the same link again. Requires Android 8 or newer.
+
 ## Status
 
 | Feature | State |
