@@ -1,5 +1,7 @@
 package com.yezdiconnect.app.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -92,6 +94,22 @@ class ScreensScreenshotTest {
         compose.onNodeWithText("Add fill-up").performScrollTo()
         compose.waitForIdle()
         shot("3c-bike-fuel")
+    }
+
+    @Test fun guide() {
+        compose.setContent {
+            YezdiTheme {
+                androidx.compose.foundation.layout.Box(
+                    androidx.compose.ui.Modifier.background(YezdiColors.Background),
+                ) { ObdGuideContent(androidx.compose.ui.Modifier.verticalScroll(androidx.compose.foundation.rememberScrollState())) }
+            }
+        }
+        compose.waitForIdle()
+        compose.onRoot().captureRoboImage("build/screenshots/5-guide.png")
+        compose.onNodeWithText("Tap Read fault codes.").performScrollTo()
+        compose.onRoot().captureRoboImage("build/screenshots/5b-guide.png")
+        compose.onNodeWithText("The app only reads data", substring = true).performScrollTo()
+        compose.onRoot().captureRoboImage("build/screenshots/5c-guide.png")
     }
 
     @Test fun setup() {

@@ -65,6 +65,7 @@ fun BikeScreen(app: YezdiApp) {
     val live by app.obd.live.collectAsStateWithLifecycle()
     val codes by app.obd.faultCodes.collectAsStateWithLifecycle()
     var showPicker by remember { mutableStateOf(false) }
+    var showGuide by remember { mutableStateOf(false) }
 
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
@@ -73,12 +74,12 @@ fun BikeScreen(app: YezdiApp) {
         ScreenHeader(stringResource(R.string.tab_bike), stringResource(R.string.bike_subtitle))
 
         SectionLabel(stringResource(R.string.section_obd))
-        ObdAdapterCard(app, obdState, onFind = { showPicker = true })
+        ObdAdapterCard(app, obdState, onFind = { showPicker = true }, onHelp = { showGuide = true })
 
         live?.let { LiveEngine(it) }
 
         SectionLabel(stringResource(R.string.section_health))
-        HealthCard(codes, connected = obdState is ObdState.Connected, onRead = app.obd::readFaultCodes)
+        HealthCard(codes, connected = obdState is ObdState.Connected, onRead = app.obd::readFaultCodes, onHelp = { showGuide = true })
 
         SectionLabel(stringResource(R.string.section_fuel))
         FuelSection(app)
@@ -89,10 +90,11 @@ fun BikeScreen(app: YezdiApp) {
     }
 
     if (showPicker) AdapterPicker(app, onDismiss = { showPicker = false })
+    if (showGuide) ObdGuideSheet(onDismiss = { showGuide = false })
 }
 
 @Composable
-private fun ObdAdapterCard(app: YezdiApp, state: ObdState, onFind: () -> Unit) {
+private fun ObdAdapterCard(app: YezdiApp, state: ObdState, onFind: () -> Unit, onHelp: () -> Unit) {
     val context = LocalContext.current
     val saved = app.obd.savedAdapter
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
@@ -109,6 +111,7 @@ private fun ObdAdapterCard(app: YezdiApp, state: ObdState, onFind: () -> Unit) {
                         if (Permissions.hasBluetooth(context)) app.obd.reconnect() else permission.launch(Permissions.bluetooth)
                     }
                 }
+                HowItWorksLink(onHelp, Modifier.padding(top = 4.dp))
             }
             is ObdState.Connecting -> Row(verticalAlignment = Alignment.CenterVertically) {
                 CircularProgressIndicator(Modifier.size(22.dp), color = YezdiColors.Accent, strokeWidth = 2.dp)
@@ -140,6 +143,7 @@ private fun ObdAdapterCard(app: YezdiApp, state: ObdState, onFind: () -> Unit) {
                     if (Permissions.hasBluetooth(context)) app.obd.retry() else permission.launch(Permissions.bluetooth)
                 })
                 SecondaryButton(stringResource(R.string.obd_find_adapter), Modifier.padding(top = 8.dp), onFind)
+                HowItWorksLink(onHelp, Modifier.padding(top = 4.dp))
             }
         }
     }
@@ -204,7 +208,7 @@ private fun LiveEngine(live: ObdLive) {
 }
 
 @Composable
-private fun HealthCard(codes: FaultCodes, connected: Boolean, onRead: () -> Unit) {
+private fun HealthCard(codes: FaultCodes, connected: Boolean, onRead: () -> Unit, onHelp: () -> Unit) {
     SurfaceCard {
         when (codes) {
             FaultCodes.NotRead -> Text(
@@ -236,6 +240,7 @@ private fun HealthCard(codes: FaultCodes, connected: Boolean, onRead: () -> Unit
         if (connected && codes !is FaultCodes.Reading) {
             PrimaryButton(stringResource(R.string.health_read), onRead, Modifier.padding(top = 14.dp))
         }
+        if (!connected) HowItWorksLink(onHelp, Modifier.padding(top = 4.dp))
     }
 }
 
