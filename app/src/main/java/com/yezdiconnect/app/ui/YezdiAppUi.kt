@@ -2,10 +2,17 @@ package com.yezdiconnect.app.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -37,22 +46,41 @@ fun YezdiAppUi(app: YezdiApp) {
         val nav = rememberNavController()
         val backStack by nav.currentBackStackEntryAsState()
         Scaffold(
+            containerColor = YezdiColors.Background,
+            contentWindowInsets = WindowInsets(0.dp),
+            topBar = {
+                Column(Modifier.fillMaxWidth().statusBarsPadding()) {
+                    Wordmark(Modifier.padding(horizontal = 16.dp, vertical = 14.dp))
+                    // The Bluetooth link to the bike isn't built yet (waiting for the bike data tasks).
+                    StatusBanner(stringResource(R.string.banner_bike_not_connected), BannerKind.Warn)
+                }
+            },
             bottomBar = {
-                NavigationBar {
-                    Tab.entries.forEach { tab ->
-                        val selected = backStack?.destination?.hierarchy?.any { it.route == tab.route } == true
-                        NavigationBarItem(
-                            selected = selected,
-                            onClick = {
-                                nav.navigate(tab.route) {
-                                    popUpTo(nav.graph.findStartDestination().id) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
-                            icon = { Icon(painterResource(tab.icon), contentDescription = null) },
-                            label = { Text(stringResource(tab.label)) },
-                        )
+                Column {
+                    HorizontalDivider(color = YezdiColors.OutlineVariant)
+                    NavigationBar(containerColor = YezdiColors.Surface) {
+                        Tab.entries.forEach { tab ->
+                            val selected = backStack?.destination?.hierarchy?.any { it.route == tab.route } == true
+                            NavigationBarItem(
+                                selected = selected,
+                                onClick = {
+                                    nav.navigate(tab.route) {
+                                        popUpTo(nav.graph.findStartDestination().id) { saveState = true }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
+                                },
+                                icon = { Icon(painterResource(tab.icon), contentDescription = null) },
+                                label = { Text(stringResource(tab.label), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.SemiBold) },
+                                colors = NavigationBarItemDefaults.colors(
+                                    selectedIconColor = YezdiColors.Accent,
+                                    selectedTextColor = YezdiColors.Accent,
+                                    indicatorColor = YezdiColors.Accent.copy(alpha = 0.16f),
+                                    unselectedIconColor = YezdiColors.Muted,
+                                    unselectedTextColor = YezdiColors.Muted,
+                                ),
+                            )
+                        }
                     }
                 }
             },

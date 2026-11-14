@@ -7,6 +7,15 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.ui.graphics.Color
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.yezdiconnect.app.nav.Maneuver
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -83,63 +91,81 @@ fun MapScreen(app: YezdiApp) {
         camera.animate(CameraUpdateFactory.newLatLng(LatLng(last.first, last.second)))
     }
 
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().background(YezdiColors.Background)) {
         if (BuildConfig.MAPS_API_KEY_SET) {
+            val mapStyle = remember { MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style_dark) }
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = camera,
-                properties = MapProperties(isMyLocationEnabled = hasLocation),
+                properties = MapProperties(isMyLocationEnabled = hasLocation, mapStyleOptions = mapStyle),
                 uiSettings = MapUiSettings(myLocationButtonEnabled = hasLocation, zoomControlsEnabled = false),
                 onMapLoaded = { mapLoaded = true },
             ) {
                 live?.path?.takeIf { it.size >= 2 }?.let { path ->
-                    Polyline(points = path.map { LatLng(it.first, it.second) }, color = MaterialTheme.colorScheme.primary, width = 12f)
+                    Polyline(points = path.map { LatLng(it.first, it.second) }, color = YezdiColors.Accent, width = 12f)
                 }
             }
         } else {
-            Text(
+            NoticeBox(
                 stringResource(R.string.maps_key_missing),
-                modifier = Modifier.align(Alignment.Center).padding(24.dp),
+                modifier = Modifier.align(Alignment.Center).padding(16.dp),
             )
         }
 
-        Column(Modifier.align(Alignment.TopCenter).fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Column(
+            Modifier.align(Alignment.TopCenter).fillMaxWidth().padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             NavigateBar()
-            maneuver?.let { m ->
-                Card(Modifier.fillMaxWidth()) {
-                    Column(Modifier.padding(12.dp)) {
-                        Text(
-                            "${m.distance?.display() ?: ""}  ${m.type.name.replace('_', ' ').lowercase()}",
-                            style = MaterialTheme.typography.titleLarge,
-                        )
-                        m.road?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
-                    }
-                }
-            }
+            maneuver?.let { m -> ManeuverCard(m) }
         }
 
-        Card(Modifier.align(Alignment.BottomCenter).fillMaxWidth().padding(12.dp)) {
-            Row(
-                Modifier.fillMaxWidth().padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                val ride = live
-                if (ride == null) {
-                    Text(stringResource(R.string.not_recording), style = MaterialTheme.typography.bodyMedium)
-                    Button(onClick = {
-                        if (Permissions.hasLocation(context)) RideTrackingService.start(context)
-                        else permissionLauncher.launch(Permissions.location)
-                    }) { Text(stringResource(R.string.start_ride)) }
-                } else {
-                    Column {
-                        Text(formatKmh(ride.speedKmh), style = MaterialTheme.typography.titleLarge)
-                        Text(formatKm(ride.distanceMeters), style = MaterialTheme.typography.bodyMedium)
-                    }
-                    OutlinedButton(onClick = { RideTrackingService.stop(context) }) { Text(stringResource(R.string.stop_ride)) }
+        SurfaceCard(Modifier.align(Alignment.BottomCenter).padding(16.dp)) {
+            val ride = live
+            if (ride == null) {
+                SectionLabel(stringResource(R.string.not_recording), Modifier.padding(bottom = 12.dp))
+                PrimaryButton(stringResource(R.string.start_ride), onClick = {
+                    if (Permissions.hasLocation(context)) RideTrackingService.start(context)
+                    else permissionLauncher.launch(Permissions.location)
+                })
+            } else {
+                SectionLabel(stringResource(R.string.ride_recording), Modifier.padding(bottom = 8.dp))
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    StatValue(formatKmh(ride.speedKmh), stringResource(R.string.stat_speed), Modifier.weight(1f))
+                    StatValue(formatKm(ride.distanceMeters), stringResource(R.string.stat_distance), Modifier.weight(1f))
+                    OutlinedButton(
+                        onClick = { RideTrackingService.stop(context) },
+                        shape = MaterialTheme.shapes.small,
+                        border = BorderStroke(1.dp, YezdiColors.Accent),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = YezdiColors.Accent),
+                    ) { Text(stringResource(R.string.stop_ride)) }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun StatValue(value: String, label: String, modifier: Modifier = Modifier) {
+    Column(modifier) {
+        Text(value, style = MaterialTheme.typography.headlineMedium)
+        Text(label, style = MaterialTheme.typography.bodySmall, color = YezdiColors.Muted)
+    }
+}
+
+/** Next turn from Google Maps: distance in accent, instruction and road below. */
+@Composable
+private fun ManeuverCard(m: Maneuver) {
+    SurfaceCard {
+        Row(verticalAlignment = Alignment.Bottom) {
+            Text(m.distance?.display() ?: "", style = MaterialTheme.typography.headlineMedium, color = YezdiColors.Accent)
+            Text(
+                "  " + m.type.name.replace('_', ' ').lowercase(),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 2.dp),
+            )
+        }
+        m.road?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = YezdiColors.Muted) }
     }
 }
 
@@ -158,18 +184,36 @@ private fun NavigateBar() {
             }
         }
     }
-    Card(Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            OutlinedTextField(
-                value = destination,
-                onValueChange = { destination = it },
-                modifier = Modifier.weight(1f),
-                singleLine = true,
-                placeholder = { Text(stringResource(R.string.where_to)) },
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
-                keyboardActions = KeyboardActions(onGo = { go() }),
-            )
-            Button(onClick = go, modifier = Modifier.padding(start = 8.dp)) { Text(stringResource(R.string.navigate)) }
-        }
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .background(YezdiColors.Surface, MaterialTheme.shapes.medium)
+            .border(1.dp, YezdiColors.Outline, MaterialTheme.shapes.medium)
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        OutlinedTextField(
+            value = destination,
+            onValueChange = { destination = it },
+            modifier = Modifier.weight(1f),
+            singleLine = true,
+            shape = MaterialTheme.shapes.small,
+            placeholder = { Text(stringResource(R.string.where_to), color = YezdiColors.Muted) },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = YezdiColors.SurfaceHigh,
+                unfocusedContainerColor = YezdiColors.SurfaceHigh,
+                focusedBorderColor = YezdiColors.Accent,
+                unfocusedBorderColor = YezdiColors.Outline,
+                cursorColor = YezdiColors.Accent,
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Go),
+            keyboardActions = KeyboardActions(onGo = { go() }),
+        )
+        Button(
+            onClick = go,
+            modifier = Modifier.padding(start = 8.dp).height(52.dp),
+            shape = MaterialTheme.shapes.small,
+            colors = ButtonDefaults.buttonColors(containerColor = YezdiColors.Accent, contentColor = Color.White),
+        ) { Text(stringResource(R.string.navigate), style = MaterialTheme.typography.labelLarge) }
     }
 }

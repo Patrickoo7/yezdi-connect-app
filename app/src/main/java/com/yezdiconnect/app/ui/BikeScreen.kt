@@ -3,11 +3,9 @@ package com.yezdiconnect.app.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +19,11 @@ import com.yezdiconnect.app.R
 import com.yezdiconnect.app.YezdiApp
 import com.yezdiconnect.app.nav.NavigationState
 
+private const val NO_VALUE = "–"
+
 /**
- * Bike connection and live stats come here once the protocol is mapped.
- * Until then it shows what the app *would* send to the dash, to test the Google Maps bridge.
+ * Live bike data goes in the tiles once the Bluetooth protocol is mapped (docs/YOUR-TASKS.txt).
+ * Until then the tiles show "–", and the dash test section shows what the app *would* send.
  */
 @Composable
 fun BikeScreen(app: YezdiApp) {
@@ -35,10 +35,33 @@ fun BikeScreen(app: YezdiApp) {
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        InfoCard(stringResource(R.string.bike_connection), stringResource(R.string.bike_waiting_protocol))
-        InfoCard(stringResource(R.string.dash_last_sent), lastSent ?: stringResource(R.string.nothing_yet), mono = true)
-        InfoCard(stringResource(R.string.maps_last_notification), raw ?: stringResource(R.string.nothing_yet), mono = true)
-        InfoCard(
+        ScreenHeader(stringResource(R.string.tab_bike), stringResource(R.string.bike_subtitle))
+        NoticeBox(stringResource(R.string.bike_waiting_protocol))
+
+        SectionLabel(stringResource(R.string.section_live))
+        TileRow {
+            StatTile(NO_VALUE, stringResource(R.string.stat_speed), Modifier.weight(1f))
+            StatTile(NO_VALUE, stringResource(R.string.stat_rpm), Modifier.weight(1f))
+        }
+        TileRow {
+            StatTile(NO_VALUE, stringResource(R.string.stat_gear), Modifier.weight(1f))
+            StatTile(NO_VALUE, stringResource(R.string.stat_battery), Modifier.weight(1f))
+        }
+
+        SectionLabel(stringResource(R.string.section_trip))
+        TileRow {
+            StatTile(NO_VALUE, stringResource(R.string.stat_odometer), Modifier.weight(1f))
+            StatTile(NO_VALUE, stringResource(R.string.stat_range), Modifier.weight(1f))
+        }
+        TileRow {
+            StatTile(NO_VALUE, stringResource(R.string.stat_economy), Modifier.weight(1f))
+            StatTile(NO_VALUE, stringResource(R.string.stat_health), Modifier.weight(1f))
+        }
+
+        SectionLabel(stringResource(R.string.section_dash_test))
+        DebugCard(stringResource(R.string.dash_last_sent), lastSent ?: stringResource(R.string.nothing_yet))
+        DebugCard(stringResource(R.string.maps_last_notification), raw ?: stringResource(R.string.nothing_yet))
+        DebugCard(
             stringResource(R.string.last_alert),
             alert?.let { "${it.kind}: ${it.from} (${it.app})" } ?: stringResource(R.string.nothing_yet),
         )
@@ -46,11 +69,9 @@ fun BikeScreen(app: YezdiApp) {
 }
 
 @Composable
-private fun InfoCard(title: String, body: String, mono: Boolean = false) {
-    Card(Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
-            Text(body, style = MaterialTheme.typography.bodyMedium, fontFamily = if (mono) FontFamily.Monospace else null)
-        }
+private fun DebugCard(title: String, body: String) {
+    SurfaceCard {
+        Text(title, style = MaterialTheme.typography.titleMedium)
+        Text(body, style = MaterialTheme.typography.bodySmall, color = YezdiColors.Muted, fontFamily = FontFamily.Monospace)
     }
 }

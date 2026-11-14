@@ -17,6 +17,17 @@ the official app's backends.
 
 > Not affiliated with or endorsed by Classic Legends, Jawa or Yezdi.
 
+<p>
+  <img src="docs/screenshots/1-map.png" width="200" alt="Map tab">
+  <img src="docs/screenshots/2-rides.png" width="200" alt="Rides tab">
+  <img src="docs/screenshots/3-bike.png" width="200" alt="Bike tab">
+  <img src="docs/screenshots/4-setup.png" width="200" alt="Setup tab">
+</p>
+
+Screenshots are rendered by `ScreensScreenshotTest` at Galaxy M31 size with sample data
+(`./gradlew :app:testDebugUnitTest -Pscreenshots`, output in `app/build/screenshots/`).
+The design is described in [docs/design-notes.md](docs/design-notes.md).
+
 ## Status
 
 | Feature | State |

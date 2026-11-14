@@ -43,6 +43,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                // Screenshots are only written when asked for: ./gradlew :app:testDebugUnitTest -Pscreenshots
+                it.systemProperty("roborazzi.test.record", project.hasProperty("screenshots").toString())
+                it.systemProperty("robolectric.graphicsMode", "NATIVE")
+                it.maxHeapSize = "2g"
+            }
+        }
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -68,4 +80,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.androidx.test.junit)
+    testImplementation(platform(libs.androidx.compose.bom))
+    testImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

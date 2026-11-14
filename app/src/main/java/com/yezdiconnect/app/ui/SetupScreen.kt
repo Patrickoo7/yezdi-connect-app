@@ -17,7 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,8 @@ fun SetupScreen() {
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        ScreenHeader(stringResource(R.string.tab_setup), stringResource(R.string.setup_subtitle))
+        SectionLabel(stringResource(R.string.section_permissions))
         PermissionItem(
             title = stringResource(R.string.perm_location),
             why = stringResource(R.string.perm_location_why),
@@ -81,19 +84,19 @@ fun SetupScreen() {
 
         // One UI also has its own sleep lists on top of Android's battery optimization.
         if (Build.MANUFACTURER.equals("samsung", ignoreCase = true)) {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text(stringResource(R.string.samsung_battery_title), style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.samsung_battery_steps), style = MaterialTheme.typography.bodySmall)
-                    Button(
-                        onClick = {
-                            context.startActivity(
-                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}")),
-                            )
-                        },
-                        modifier = Modifier.padding(top = 8.dp),
-                    ) { Text(stringResource(R.string.open_app_settings)) }
-                }
+            SectionLabel(stringResource(R.string.samsung_battery_title))
+            SurfaceCard {
+                NumberedStep(1, stringResource(R.string.samsung_step_unrestricted))
+                NumberedStep(2, stringResource(R.string.samsung_step_never_sleeping), Modifier.padding(top = 10.dp))
+                PrimaryButton(
+                    stringResource(R.string.open_app_settings),
+                    onClick = {
+                        context.startActivity(
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}")),
+                        )
+                    },
+                    modifier = Modifier.padding(top = 14.dp),
+                )
             }
         }
     }
@@ -101,16 +104,26 @@ fun SetupScreen() {
 
 @Composable
 private fun PermissionItem(title: String, why: String, granted: Boolean, onGrant: () -> Unit) {
-    Card(Modifier.fillMaxWidth()) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+    SurfaceCard {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(title, style = MaterialTheme.typography.titleMedium)
-                Text(why, style = MaterialTheme.typography.bodySmall)
+                Text(why, style = MaterialTheme.typography.bodySmall, color = YezdiColors.Muted)
             }
             if (granted) {
-                Text(stringResource(R.string.granted), color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(start = 8.dp))
+                Text(
+                    stringResource(R.string.granted),
+                    color = YezdiColors.Ok,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(start = 12.dp),
+                )
             } else {
-                Button(onClick = onGrant, modifier = Modifier.padding(start = 8.dp)) { Text(stringResource(R.string.grant)) }
+                Button(
+                    onClick = onGrant,
+                    modifier = Modifier.padding(start = 12.dp),
+                    shape = MaterialTheme.shapes.small,
+                    colors = ButtonDefaults.buttonColors(containerColor = YezdiColors.Accent, contentColor = Color.White),
+                ) { Text(stringResource(R.string.grant), style = MaterialTheme.typography.labelLarge) }
             }
         }
     }

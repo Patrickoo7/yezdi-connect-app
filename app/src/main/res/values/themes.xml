@@ -1,0 +1,8 @@
+<resources>
+    <!-- Dark window behind Compose, so there's no white flash on launch. -->
+    <style name="Theme.YezdiConnect" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/background</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

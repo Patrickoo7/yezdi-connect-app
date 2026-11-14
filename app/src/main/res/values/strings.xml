@@ -11,6 +11,9 @@
     <string name="google_maps_missing">Google Maps is not installed.</string>
     <string name="maps_key_missing">No Google Maps API key in this build. Add MAPS_API_KEY to local.properties and rebuild (see README).</string>
 
+    <string name="banner_bike_not_connected">Bike not connected</string>
+    <string name="stat_speed">Speed</string>
+    <string name="stat_distance">Distance</string>
     <string name="not_recording">Not recording</string>
     <string name="start_ride">Start ride</string>
     <string name="stop_ride">Stop ride</string>
@@ -18,8 +21,28 @@
     <string name="ride_recording">Recording your ride</string>
     <string name="no_rides">No rides yet. Start one from the Map tab.</string>
 
-    <string name="bike_connection">Bike connection</string>
-    <string name="bike_waiting_protocol">Not available yet. Bluetooth connection and live stats are added once the bike data from docs/YOUR-TASKS.txt is analyzed.</string>
+    <string name="bike_subtitle">Live data from your bike</string>
+    <string name="section_live">Live</string>
+    <string name="section_trip">Trip &amp; health</string>
+    <string name="section_dash_test">Dash output (test)</string>
+    <string name="stat_rpm">RPM</string>
+    <string name="stat_gear">Gear</string>
+    <string name="stat_battery">Battery</string>
+    <string name="stat_odometer">Odometer</string>
+    <string name="stat_range">Range left</string>
+    <string name="stat_economy">Economy</string>
+    <string name="stat_health">Fault codes</string>
+    <string name="rides_subtitle">Your rides, stored on this phone</string>
+    <string name="ride_history">History</string>
+    <string name="ride_title">Ride</string>
+    <string name="stat_rides">Rides</string>
+    <string name="stat_total">Total distance</string>
+    <string name="stat_time">Time</string>
+    <string name="stat_avg_speed">Average speed</string>
+    <string name="stat_max_speed">Top speed</string>
+    <string name="setup_subtitle">Allow these once so everything works on the move</string>
+    <string name="section_permissions">Permissions</string>
+    <string name="bike_waiting_protocol">Live data appears here once the bike connection is built. It is waiting on the bike data tasks (docs/YOUR-TASKS.txt).</string>
     <string name="dash_last_sent">Would send to dash</string>
     <string name="maps_last_notification">Last Google Maps navigation text</string>
     <string name="last_alert">Last call/message alert</string>
@@ -33,8 +56,9 @@
     <string name="perm_notification_access_why">Reads Google Maps turn instructions and incoming call/message alerts to send them to the bike dash. Nothing leaves your phone.</string>
     <string name="perm_battery">Run in background</string>
     <string name="perm_battery_why">Turns off battery optimization so ride recording and turn instructions keep working with the screen off.</string>
-    <string name="samsung_battery_title">Samsung phones: one more step</string>
-    <string name="samsung_battery_steps">One UI can still put the app to sleep. In the app settings, open Battery and choose Unrestricted. Then go to Settings → Battery and device care → Battery → Background usage limits and add Yezdi Connect to \"Never sleeping apps\".</string>
+    <string name="samsung_battery_title">Samsung: keep the app awake</string>
+    <string name="samsung_step_unrestricted">In the app settings, open Battery and choose Unrestricted.</string>
+    <string name="samsung_step_never_sleeping">Settings → Battery and device care → Battery → Background usage limits → Never sleeping apps → add Yezdi Connect.</string>
     <string name="open_app_settings">Open app settings</string>
     <string name="grant">Allow</string>
     <string name="granted">Allowed</string>
