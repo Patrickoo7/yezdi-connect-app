@@ -1,9 +1,11 @@
-YEZDI CONNECT - YOUR 2 TASKS
+YEZDI CONNECT - YOUR 3 TASKS
 ============================
 
-These two recordings tell us how your bike talks over Bluetooth. Do them when you
-are free, then share the files in the chat. Task 1 takes about 15 minutes, Task 2
-about 30 minutes (including a short ride).
+Tasks 1 and 2 are recordings that show how your bike talks over Bluetooth.
+Task 3 is about the bike's OBD-2 diagnostic port (engine data, fuel economy,
+bike health). Do them when you are free, then share the results in the chat.
+Task 1 takes about 15 minutes, Task 2 about 30 minutes (including a short ride),
+Task 3 about 10 minutes.
 
 You need: your Yezdi Adventure, your Galaxy M31, and the official Jawa/Yezdi app.
 
@@ -101,6 +103,48 @@ SEND ME:
   - ONLY the btsnoop_hci.log file (NOT the whole bug report zip, because it
     has a lot of personal data)
   - your list of steps with their times
+
+
+------------------------------------------------------------
+TASK 3 - Find the OBD-2 port  (engine data, fuel economy, bike health)
+------------------------------------------------------------
+
+Bikes sold in India from April 2023 have an OBD-2 diagnostic port. With a small
+Bluetooth adapter plugged into it, the app can read engine data, fault codes
+(check-engine light) and battery voltage, and estimate fuel economy.
+The app only READS data. It will never change or "flash" anything on the bike.
+
+1. Note your bike's exact model and year (e.g. Yezdi Adventure, 2024).
+   It's on your RC (registration certificate) or the bike's invoice.
+
+2. Find the diagnostic port. On most bikes it is:
+     - under the rider seat, or
+     - near the battery, or
+     - behind a side panel.
+   It's a small plastic plug with several pins, often with a rubber cap.
+   If you can't find it, check the owner's manual for "diagnostic connector"
+   or "OBD", or ask your service centre where it is.
+
+3. Take 2-3 clear PHOTOS of it:
+     - one close-up straight at the pins (so the pins can be counted),
+     - one showing where it is on the bike.
+   Count the pins if you can.
+
+4. Check whether you already have an OBD adapter (a small plug, often sold
+   for cars, with Bluetooth). If you do, photograph its label/box or note
+   its name and model.
+
+5. DON'T BUY ANYTHING YET. Once I see the photos, I'll tell you exactly which
+   adapter and which cable fit your bike. For reference, good adapters are
+   Bluetooth LE "ELM327-compatible" ones with a genuine chip, e.g.
+   OBDLink CX, or the cheaper Vgate iCar Pro BLE. Avoid very cheap
+   "ELM327 v1.5 / v2.1" clones: they often don't work with bikes.
+
+SEND ME:
+  - the photos of the port
+  - the number of pins (if you counted)
+  - your bike's model and year
+  - your adapter's name/model, if you have one
 
 
 ------------------------------------------------------------
