@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Yezdi Connect</string>
+
+    <string name="tab_map">Map</string>
+    <string name="tab_rides">Rides</string>
+    <string name="tab_bike">Bike</string>
+    <string name="tab_setup">Setup</string>
+
+    <string name="where_to">Where to?</string>
+    <string name="navigate">Go</string>
+    <string name="google_maps_missing">Google Maps is not installed.</string>
+    <string name="maps_key_missing">No Google Maps API key in this build. Add MAPS_API_KEY to local.properties and rebuild (see README).</string>
+
+    <string name="not_recording">Not recording</string>
+    <string name="start_ride">Start ride</string>
+    <string name="stop_ride">Stop ride</string>
+    <string name="channel_ride">Ride recording</string>
+    <string name="ride_recording">Recording your ride</string>
+    <string name="no_rides">No rides yet. Start one from the Map tab.</string>
+
+    <string name="bike_connection">Bike connection</string>
+    <string name="bike_waiting_protocol">Not available yet. Bluetooth connection and live stats are added once the bike data from docs/YOUR-TASKS.txt is analyzed.</string>
+    <string name="dash_last_sent">Would send to dash</string>
+    <string name="maps_last_notification">Last Google Maps navigation text</string>
+    <string name="last_alert">Last call/message alert</string>
+    <string name="nothing_yet">Nothing yet</string>
+
+    <string name="perm_location">Location</string>
+    <string name="perm_location_why">Shows you on the map and records rides.</string>
+    <string name="perm_notifications">Notifications</string>
+    <string name="perm_notifications_why">Shows the \"recording your ride\" notification.</string>
+    <string name="perm_notification_access">Notification access</string>
+    <string name="perm_notification_access_why">Reads Google Maps turn instructions and incoming call/message alerts to send them to the bike dash. Nothing leaves your phone.</string>
+    <string name="grant">Allow</string>
+    <string name="granted">Allowed</string>
+</resources>

@@ -1,16 +1,19 @@
-# Dependencies
-node_modules/
-
-# Environment files
-.env
-.env.*
-!.env.example
-
-# Build output
-dist/
+# Gradle / Android build output
+.gradle/
+.kotlin/
 build/
+captures/
+*.apk
+*.aab
 
-# Logs
+# Local machine settings: Android SDK path and your Google Maps API key. Never commit.
+local.properties
+
+# Signing keys
+*.jks
+*.keystore
+
+# Logs (bike logs you share for analysis should not end up in git by accident)
 *.log
 
 # OS / editor files
@@ -18,3 +21,4 @@ build/
 Thumbs.db
 .vscode/
 .idea/
+*.iml
