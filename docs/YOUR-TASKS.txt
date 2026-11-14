@@ -1,0 +1,101 @@
+YEZDI CONNECT - YOUR 2 TASKS
+============================
+
+These two recordings tell us how your bike talks over Bluetooth. Do them when you
+are free, then share the files in the chat. Task 1 takes about 15 minutes, Task 2
+about 30 minutes (including a short ride).
+
+You need: your Yezdi Adventure, your Android phone, and the official Jawa/Yezdi app.
+
+
+------------------------------------------------------------
+TASK 1 - Scan the bike with nRF Connect  (what the bike exposes)
+------------------------------------------------------------
+
+1. Install "nRF Connect for Mobile" (by Nordic Semiconductor) from the Play Store.
+
+2. Close the official Yezdi app completely (swipe it away from recent apps) and turn
+   off its auto-connect if it has one. The bike usually allows only ONE Bluetooth
+   connection at a time.
+
+3. Turn the bike's ignition ON.
+
+4. Open nRF Connect -> SCANNER tab -> tap SCAN.
+   Find the bike. Its name may contain Yezdi, Jawa or CL. If unsure, walk closer to
+   the bike: the right device's signal (dBm number) gets stronger.
+   Tap CONNECT.
+
+5. You'll see a list of "services". Tap each one to expand it.
+   Take SCREENSHOTS of everything: every service and every characteristic, with
+   their properties (READ / WRITE / NOTIFY / INDICATE).
+
+6. For every characteristic that has NOTIFY or INDICATE, tap the icon with the
+   three down-arrows to turn notifications on.
+
+7. Now do these one at a time, and WRITE DOWN THE TIME (with seconds if you can)
+   of each one:
+     a) ignition off, then on again
+     b) start the engine
+     c) rev the engine a few times
+     d) ride a short distance (a minute or two)
+     e) switch/reset the trip meter
+     f) anything else the dash shows (low fuel warning, indicators, etc.)
+
+8. For every characteristic that has READ, tap the single down-arrow icon once.
+
+9. Open the LOG tab (swipe from the left / menu -> Log, depending on version)
+   -> share/export the log as a file.
+
+SEND ME:
+  - the exported log file
+  - all screenshots
+  - your list of actions with their times
+
+
+------------------------------------------------------------
+TASK 2 - Record a Bluetooth log while the official app navigates
+          (what the official app sends to the dash)
+------------------------------------------------------------
+
+Part A - Turn on Bluetooth logging
+1. Settings -> About phone -> tap "Build number" 7 times.
+   (Developer options are now on. On some phones it's under
+   About phone -> Software information.)
+2. Settings -> System -> Developer options ->
+   "Enable Bluetooth HCI snoop log" -> set it to Enabled (or "Full" if offered).
+3. Turn Bluetooth OFF and then ON again (this starts the log).
+
+Part B - Use the official app, and WRITE DOWN THE TIME of each step
+4. Open the official Yezdi app and connect to the bike.
+5. Start navigation in the official app to somewhere close, on a route with
+   several left and right turns and, if possible, a roundabout.
+   Ride it (or at least the first few turns).
+6. Get a test phone call from a known number (ask a friend, or call yourself
+   from another phone). Let it show on the dash.
+7. Get a test SMS. Let it show on the dash.
+8. Open the app's other screens once (stats, settings, etc.).
+
+   NOTE: the log will contain the test caller's number/name and the SMS text,
+   so use a test message you don't mind sharing.
+
+Part C - Get the log file
+9. Go back to Developer options and turn "Enable Bluetooth HCI snoop log" OFF.
+10. Developer options -> "Take bug report" -> choose "Full report".
+    Wait for the notification (a few minutes), then tap it to share/save the zip.
+11. Open the zip and find this file:
+        FS/data/misc/bluetooth/logs/btsnoop_hci.log
+    (On Samsung and some other phones the folder can differ. Search the zip for
+    "btsnoop" if you can't find it.)
+
+SEND ME:
+  - ONLY the btsnoop_hci.log file (NOT the whole bug report zip, because it
+    has a lot of personal data)
+  - your list of steps with their times
+
+
+------------------------------------------------------------
+TIPS
+------------------------------------------------------------
+- Times matter a lot: they let me match each Bluetooth message to what you did.
+- If a step doesn't work on your phone, skip it and tell me what you saw.
+- If you get stuck, send me a screenshot and I'll help.
