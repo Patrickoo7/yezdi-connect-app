@@ -85,8 +85,8 @@
     <string name="guide_arrow_bt">BT</string>
     <string name="guide_need_label">What you need</string>
     <string name="guide_need_1">A Bluetooth OBD-2 adapter: a thumb-sized plug that goes into the bike\'s diagnostic socket and talks to your phone over Bluetooth. It can stay plugged in.</string>
-    <string name="guide_need_2">The socket is usually under the rider seat or near the battery. Bikes often use a smaller socket than cars, so you may also need a short adapter cable.</string>
-    <string name="guide_need_photo">Before buying, send a photo of your bike\'s socket (task 3 in docs/YOUR-TASKS.txt), so the right adapter and cable can be picked.</string>
+    <string name="guide_need_2">The socket is usually under the rider seat or near the battery. Bikes use a smaller socket than cars, so you also need a short cable from the bike\'s socket to the adapter. The Yezdi Adventure has a 4-pin socket.</string>
+    <string name="guide_need_photo">Get the 4-pin cable (or its wiring) from your Jawa-Yezdi service centre. Don\'t buy a 4-pin cable made for another brand (Yamaha, Honda, Kawasaki, Harley): the wiring differs and can damage the adapter. Details: task 3 in docs/YOUR-TASKS.txt.</string>
     <string name="guide_steps_label">Checking your bike</string>
     <string name="guide_step_1">Plug the adapter into the bike\'s diagnostic socket.</string>
     <string name="guide_step_2">Turn the ignition on (engine can be off or running).</string>
